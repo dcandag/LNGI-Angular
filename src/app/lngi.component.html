@@ -1,0 +1,24 @@
+<div class="lngi-container">
+  <h2>Large Numbers Gradually Increasing</h2>
+  <div class="number-display">{{ formattedNumber$ | async }}</div>
+  <div class="status">{{ isRunning ? 'Running...' : 'Stopped' }}</div>
+  <div class="controls">
+    <div class="control-group">
+      <label for="pace">Pace:</label>
+      <select id="pace" [(ngModel)]="pace" (change)="changePace(+pace)">
+        <option *ngFor="let option of paceOptions" [value]="option.value">{{ option.label }}</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="multiplier">Increment:</label>
+      <select id="multiplier" [(ngModel)]="multiplier" (change)="changeMultiplier(+multiplier)">
+        <option *ngFor="let option of multiplierOptions" [value]="option.value">{{ option.label }}</option>
+      </select>
+    </div>
+    <div class="button-group">
+      <button (click)="start()" [disabled]="isRunning">Start</button>
+      <button (click)="pause()" [disabled]="!isRunning">Pause</button>
+      <button (click)="reset()">Reset</button>
+    </div>
+  </div>
+</div>
