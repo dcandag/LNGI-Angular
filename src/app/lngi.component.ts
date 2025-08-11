@@ -20,6 +20,7 @@ export class LngiComponent implements OnDestroy {
   );
 
   pace = 1000; // milliseconds
+  customPace = 1000; // for freeform input
   multiplier = 1; // increment multiplier
   subscription: Subscription | null = null;
   isRunning = false;
@@ -28,7 +29,7 @@ export class LngiComponent implements OnDestroy {
     { label: 'Slow', value: 500 },
     { label: 'Medium', value: 200 },
     { label: 'Fast', value: 50 },
-    { label: 'Lightning Fast', value: 3 } // Instant pace for testing
+    { label: 'Lightning Fast', value: 1 } // Instant pace for testing
   ];
 
   multiplierOptions = [
@@ -43,7 +44,8 @@ export class LngiComponent implements OnDestroy {
     { label: '+100000', value: 100000 },
     { label: '+1000000', value: 1000000 },
     { label: '+10000000', value: 10000000 },
-    { label: '+100000000', value: 100000000 }
+    { label: '+100000000', value: 100000000 },
+    { label: '+1000000000', value: 1000000000 }
   ];
 
   start() {
@@ -71,6 +73,37 @@ export class LngiComponent implements OnDestroy {
 
   changePace(newPace: number) {
     this.pace = newPace;
+    this.customPace = newPace; // sync custom input with preset
+    if (this.subscription) {
+      this.pause();
+      this.start();
+    }
+  }
+
+  changeCustomPace(newPace: string) {
+    const paceValue = +newPace;
+    if (paceValue > 0) {
+      this.pace = paceValue;
+      this.customPace = paceValue;
+      if (this.subscription) {
+        this.pause();
+        this.start();
+      }
+    }
+  }
+
+  adjustSpeed(direction: 'up' | 'down') {
+    let adjustment = 50;
+    if (this.customPace > 1000) adjustment = 200;
+    if (this.customPace > 5000) adjustment = 500;
+
+    if (direction === 'up') {
+      this.customPace = Math.max(1, this.customPace - adjustment); // faster (lower number)
+    } else {
+      this.customPace = this.customPace + adjustment; // slower (higher number)
+    }
+
+    this.pace = this.customPace;
     if (this.subscription) {
       this.pause();
       this.start();

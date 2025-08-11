@@ -4,11 +4,29 @@
   <div class="status">{{ isRunning ? 'Running...' : 'Stopped' }}</div>
   <div class="controls">
     <div class="control-group">
-      <label for="pace">Pace:</label>
+      <label for="pace">Pace Presets:</label>
       <select id="pace" [(ngModel)]="pace" (change)="changePace(+pace)">
         <option *ngFor="let option of paceOptions" [value]="option.value">{{ option.label }}</option>
       </select>
     </div>
+
+    <div class="control-group">
+      <label for="customPace">Custom Speed (ms):</label>
+      <div class="speed-controls">
+        <button class="speed-btn" (click)="adjustSpeed('up')" title="Faster">+</button>
+        <input
+          type="number"
+          id="customPace"
+          [(ngModel)]="customPace"
+          (change)="changeCustomPace(customPace.toString())"
+          min="1"
+          step="1"
+          placeholder="Enter milliseconds">
+        <button class="speed-btn" (click)="adjustSpeed('down')" title="Slower">-</button>
+      </div>
+      <small class="help-text">Lower = faster, Higher = slower</small>
+    </div>
+
     <div class="control-group">
       <label for="multiplier">Increment:</label>
       <select id="multiplier" [(ngModel)]="multiplier" (change)="changeMultiplier(+multiplier)">
